@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOF Admin Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body{background:linear-gradient(135deg,#1a237e,#283593,#3949ab);display:flex;align-items:center;justify-content:center;padding:20px;}
+    .lc{background:white;border-radius:20px;padding:45px 40px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+    .lc .top{text-align:center;margin-bottom:30px;}
+    .lc .top .ic{width:70px;height:70px;background:linear-gradient(135deg,#1a237e,#3949ab);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;}
+    .lc .top .ic i{font-size:1.8rem;color:white;}
+    .lc .top h2{color:#1a237e;font-size:1.4rem;}
+    .lc .top p{color:#64748b;font-size:0.88rem;margin-top:4px;}
+    .fg{margin-bottom:20px;}
+    .fg label{display:block;font-weight:600;font-size:0.85rem;color:#374151;margin-bottom:8px;}
+    .iw{position:relative;}.iw i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#9ca3af;}
+    .iw input{width:100%;padding:13px 16px 13px 42px;border:2px solid #e2e8f0;border-radius:10px;font-size:0.95rem;font-family:'Inter',sans-serif;outline:none;transition:all 0.3s;}
+    .iw input:focus{border-color:#3949ab;box-shadow:0 0 0 3px rgba(57,73,171,0.1);}
+    .lb{width:100%;padding:14px;background:linear-gradient(135deg,#1a237e,#3949ab);color:white;border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:all 0.3s;}
+    .lb:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,35,126,0.3);}
+    .em{background:#fce4ec;color:#c62828;padding:12px;border-radius:8px;font-size:0.85rem;text-align:center;margin-bottom:15px;display:none;}
+    .bl{text-align:center;margin-top:20px;}.bl a{color:#64748b;text-decoration:none;font-size:0.85rem;}.bl a:hover{color:#1a237e;}
+  </style>
+</head>
+<body>
+  <div class="lc">
+    <div class="top"><div class="ic"><i class="fas fa-shield-alt"></i></div><h2>Admin Login</h2><p>SOF Olympiad Management Portal</p></div>
+    <div class="em" id="errMsg">Invalid credentials. Please try again.</div>
+    <form onsubmit="login(event)">
+      <div class="fg"><label>Admin ID</label><div class="iw"><i class="fas fa-user"></i><input type="text" id="adminId" placeholder="Enter admin ID" required></div></div>
+      <div class="fg"><label>Password</label><div class="iw"><i class="fas fa-lock"></i><input type="password" id="adminPw" placeholder="Enter password" required></div></div>
+      <button type="submit" class="lb" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </form>
+    <div class="bl"><a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a></div>
+  </div>
+  <script src="js/api.js"></script>
+  <script>
+    if (checkAdminSession()) { window.location.href = 'dashboard.html'; }
+    async function login(e) {
+      e.preventDefault();
+      var id = document.getElementById('adminId').value.trim();
+      var pw = document.getElementById('adminPw').value;
+      var btn = document.getElementById('loginBtn');
+      btn.disabled = true; btn.innerHTML = '<div class="spinner white"></div> Verifying...';
+      document.getElementById('errMsg').style.display = 'none';
+      try {
+        var r = await apiPost('verifyAdmin', { id: id, password: pw });
+        if (r.success) { setAdminSession(); window.location.href = 'dashboard.html'; }
+        else { document.getElementById('errMsg').style.display = 'block'; btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login'; }
+      } catch (er) { alert('Server error.'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login'; }
+    }
+  </script>
+</body>
+</html>

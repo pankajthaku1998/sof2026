@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOF Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .sb{position:fixed;left:0;top:0;width:250px;height:100vh;background:linear-gradient(180deg,#1a237e,#283593);color:white;z-index:100;overflow-y:auto;transition:transform 0.3s;}
+    .sb-h{padding:25px 20px;border-bottom:1px solid rgba(255,255,255,0.1);text-align:center;}.sb-h h3{font-size:1rem;}.sb-h p{font-size:0.75rem;opacity:0.7;margin-top:3px;}
+    .sb-n{padding:15px 0;}.ni{display:flex;align-items:center;gap:12px;padding:13px 25px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.3s;font-size:0.9rem;font-weight:500;border-left:3px solid transparent;}
+    .ni:hover{background:rgba(255,255,255,0.1);color:white;}.ni.active{background:rgba(255,255,255,0.15);color:white;border-left-color:#ff6f00;}
+    .ni i{width:20px;text-align:center;}.nd{height:1px;background:rgba(255,255,255,0.1);margin:10px 20px;}
+    .mc{margin-left:250px;min-height:100vh;}
+    .tb{background:white;padding:15px 30px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+    .tb h2{font-size:1.15rem;color:#1a237e;}.tba{display:flex;gap:10px;}
+    .tbtn{padding:8px 16px;border:2px solid #e2e8f0;background:white;border-radius:8px;cursor:pointer;font-size:0.82rem;font-weight:500;color:#374151;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:all 0.3s;}
+    .tbtn:hover{border-color:#3949ab;color:#1a237e;}.tbtn.danger{color:#ef4444;border-color:#fecaca;}.tbtn.danger:hover{background:#fef2f2;}
+    .ca{padding:25px 30px;}.tc{display:none;}.tc.active{display:block;}
+    .sg{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:25px;}
+    .sc{background:white;border-radius:14px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,0.04);border:1px solid #e2e8f0;}
+    .sc .si{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.1rem;}
+    .sc .sv{font-size:1.6rem;font-weight:700;color:#1a237e;}.sc .sl{font-size:0.8rem;color:#64748b;margin-top:3px;}
+    .tbc{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);border:1px solid #e2e8f0;}
+    .tbch{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;gap:10px;}.tbch h3{font-size:1rem;color:#1a237e;}
+    .sbox{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .sbox input{padding:8px 14px;border:2px solid #e2e8f0;border-radius:8px;font-size:0.85rem;outline:none;font-family:'Inter',sans-serif;width:220px;}.sbox input:focus{border-color:#3949ab;}
+    .fsel{padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:0.85rem;outline:none;font-family:'Inter',sans-serif;}
+    .dt{width:100%;border-collapse:collapse;font-size:0.85rem;}
+    .dt th{background:#f8fafc;padding:12px 14px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;white-space:nowrap;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;}
+    .dt td{padding:12px 14px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}.dt tr:hover{background:#fafbff;}
+    .bg{display:inline-block;padding:4px 10px;border-radius:20px;font-size:0.72rem;font-weight:600;}
+    .bg.v{background:#e8f5e9;color:#2e7d32;}.bg.p{background:#fff3e0;color:#e65100;}.bg.o{background:#e8eaf6;color:#1a237e;margin:1px;}
+    .utr-tag{display:inline-block;margin-top:3px;font-size:0.72rem;background:#f1f5f9;color:#334155;padding:2px 7px;border-radius:4px;font-family:monospace;border:1px solid #cbd5e1;}
+    .ab{padding:5px 10px;border:1px solid #e2e8f0;background:white;border-radius:6px;cursor:pointer;font-size:0.75rem;transition:all 0.2s;margin:1px;font-family:'Inter',sans-serif;}
+    .ab.vf{color:#2e7d32;border-color:#a5d6a7;}.ab.vf:hover{background:#e8f5e9;}.ab.ed{color:#1565c0;border-color:#90caf9;}.ab.ed:hover{background:#e3f2fd;}
+    .ab.rc{color:#6a1b9a;border-color:#ce93d8;}.ab.rc:hover{background:#f3e5f5;}.ab.dl{color:#c62828;border-color:#ef9a9a;}.ab.dl:hover{background:#fce4ec;}
+    .ab.uv{color:#e65100;border-color:#ffcc80;}.ab.uv:hover{background:#fff3e0;}.ts{overflow-x:auto;}
+    .nd2{text-align:center;padding:50px 20px;color:#94a3b8;}.nd2 i{font-size:3rem;margin-bottom:15px;display:block;}.lc2{text-align:center;padding:40px;}
+    .dm{background:white;border-radius:16px;max-width:600px;width:95%;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease;text-align:left;}
+    .mh{padding:20px 25px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;}.mh h3{color:#1a237e;font-size:1.1rem;}
+    .mx{width:32px;height:32px;border:none;background:#f1f5f9;border-radius:8px;cursor:pointer;font-size:1rem;color:#64748b;display:flex;align-items:center;justify-content:center;}.mx:hover{background:#e2e8f0;}
+    .mb{padding:25px;}.mf{padding:15px 25px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;gap:10px;}
+    .mfg{margin-bottom:16px;}.mfg label{display:block;font-weight:600;font-size:0.82rem;color:#374151;margin-bottom:6px;}
+    .mfg input,.mfg select{width:100%;padding:10px 14px;border:2px solid #e2e8f0;border-radius:8px;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;}.mfg input:focus,.mfg select:focus{border-color:#3949ab;}
+    .mfr{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .mcg{display:flex;flex-wrap:wrap;gap:10px;}.mci{display:flex;align-items:center;gap:5px;font-size:0.85rem;}.mci input{width:16px;height:16px;accent-color:#1a237e;}
+    .cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+    .cc{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;}
+    .cc.ac{border-color:#a5d6a7;background:#f1f8f1;}.cc.ia{border-color:#ef9a9a;background:#fef2f2;opacity:0.7;}
+    .cc .ct{font-weight:700;color:#1a237e;}.cc .cs{font-size:0.82rem;color:#64748b;}.cc .cca{display:flex;gap:6px;margin-top:5px;}
+    .ce{background:white;border-radius:14px;padding:25px;box-shadow:0 2px 10px rgba(0,0,0,0.04);border:1px solid #e2e8f0;margin-bottom:25px;}
+    .eg{margin-bottom:18px;}.ce label{display:block;font-weight:600;font-size:0.82rem;color:#374151;margin-bottom:6px;}
+    .ce input,.ce textarea{width:100%;padding:10px 14px;border:2px solid #e2e8f0;border-radius:8px;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;}
+    .ce textarea{height:80px;resize:vertical;}.ce input:focus,.ce textarea:focus{border-color:#3949ab;}
+    .svb{padding:12px 30px;background:linear-gradient(135deg,#1a237e,#3949ab);color:white;border:none;border-radius:10px;font-size:0.95rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:8px;}.svb:hover{box-shadow:0 4px 15px rgba(26,35,126,0.3);}
+    .qr-admin-box{display:flex;align-items:center;gap:25px;flex-wrap:wrap;background:#f8fafc;padding:20px;border-radius:12px;border:2px dashed #cbd5e1;}
+    .qr-preview{width:160px;height:160px;background:white;border:1px solid #e2e8f0;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+    .qr-preview img{max-width:100%;max-height:100%;object-fit:contain;}
+    .sbt{display:none;position:fixed;bottom:20px;left:20px;width:50px;height:50px;background:#1a237e;color:white;border:none;border-radius:50%;font-size:1.2rem;cursor:pointer;z-index:150;box-shadow:0 4px 15px rgba(26,35,126,0.4);align-items:center;justify-content:center;}
+    @media(max-width:900px){.sb{transform:translateX(-100%);}.sb.open{transform:translateX(0);}.mc{margin-left:0;}.sbt{display:flex;}.sg{grid-template-columns:1fr 1fr;}}
+    @media(max-width:600px){.sg{grid-template-columns:1fr;}.ca{padding:15px;}.tb{padding:12px 15px;}}
+  </style>
+</head>
+<body>
+  <aside class="sb" id="sidebar">
+    <div class="sb-h"><h3>SOF Admin Panel</h3><p>Olympiad Management</p></div>
+    <nav class="sb-n">
+      <div class="ni active" onclick="swTab('dashboard')" data-tab="dashboard"><i class="fas fa-chart-bar"></i> Dashboard</div>
+      <div class="ni" onclick="swTab('registrations')" data-tab="registrations"><i class="fas fa-users"></i> Registrations</div>
+      <div class="ni" onclick="swTab('classes')" data-tab="classes"><i class="fas fa-school"></i> Classes &amp; Sections</div>
+      <div class="nd"></div>
+      <div class="ni" onclick="swTab('landing')" data-tab="landing"><i class="fas fa-edit"></i> Edit Landing &amp; QR</div>
+      <div class="nd"></div>
+      <div class="ni" onclick="window.open('index.html','_blank')"><i class="fas fa-globe"></i> View Website</div>
+      <div class="ni" onclick="logout()" style="color:#ef9a9a;"><i class="fas fa-sign-out-alt"></i> Logout</div>
+    </nav>
+  </aside>
+  <button class="sbt" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+
+  <div class="mc">
+    <div class="tb"><h2 id="pgTitle">Dashboard</h2><div class="tba"><button class="tbtn" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh</button><button class="tbtn danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div>
+    <div class="ca">
+      <div class="tc active" id="tab-dashboard">
+        <div class="sg">
+          <div class="sc"><div class="si" style="background:#e8eaf6;color:#1a237e;"><i class="fas fa-users"></i></div><div class="sv" id="sT">-</div><div class="sl">Total Registrations</div></div>
+          <div class="sc"><div class="si" style="background:#e8f5e9;color:#2e7d32;"><i class="fas fa-check-circle"></i></div><div class="sv" id="sV">-</div><div class="sl">Payment Verified</div></div>
+          <div class="sc"><div class="si" style="background:#fff3e0;color:#e65100;"><i class="fas fa-clock"></i></div><div class="sv" id="sP">-</div><div class="sl">Pending</div></div>
+          <div class="sc"><div class="si" style="background:#f3e5f5;color:#6a1b9a;"><i class="fas fa-rupee-sign"></i></div><div class="sv" id="sR">-</div><div class="sl">Revenue</div></div>
+        </div>
+        <div class="tbc"><div class="tbch"><h3><i class="fas fa-chart-pie" style="margin-right:8px;color:#1a237e;"></i>Olympiad-wise</h3></div><div style="padding:20px;" id="oSC"><div class="lc2"><div class="spinner"></div></div></div></div>
+      </div>
+
+      <div class="tc" id="tab-registrations">
+        <div class="tbc">
+          <div class="tbch"><h3><i class="fas fa-list" style="margin-right:8px;color:#1a237e;"></i>All Registrations</h3><div class="sbox"><input type="text" id="searchIn" placeholder="Search name, ID or UTR..." oninput="filterTbl()"><select class="fsel" id="filterSt" onchange="filterTbl()"><option value="all">All</option><option value="verified">Verified</option><option value="pending">Pending</option></select></div></div>
+          <div class="ts"><table class="dt"><thead><tr><th>Tracking ID</th><th>Student</th><th>Class</th><th>Mobile</th><th>Olympiads</th><th>Payment / UTR</th><th>Status</th><th>Actions</th></tr></thead><tbody id="rtb"><tr><td colspan="8" class="nd2"><div class="spinner"></div><br>Loading...</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <div class="tc" id="tab-classes">
+        <div class="tbc"><div class="tbch"><h3><i class="fas fa-school" style="margin-right:8px;color:#1a237e;"></i>Classes</h3><button class="tbtn" onclick="showACM()"><i class="fas fa-plus"></i> Add</button></div><div style="padding:20px;"><div class="cg" id="cGrid"><div class="lc2"><div class="spinner"></div></div></div></div></div>
+      </div>
+
+      <div class="tc" id="tab-landing">
+        <!-- UPI Payment QR Code Upload Card (Google Drive) -->
+        <div class="ce">
+          <h3 style="color:#1a237e;margin-bottom:8px;"><i class="fas fa-qrcode" style="margin-right:8px;"></i>UPI Payment QR Code (Stored in Google Drive)</h3>
+          <p style="color:#64748b;font-size:0.85rem;margin-bottom:18px;">Upload or update the school's UPI QR Code image. It will be saved automatically in your Google Drive and shown to students selecting UPI payment.</p>
+          <div class="qr-admin-box">
+            <div class="qr-preview" id="adminQrPreview">
+              <span style="font-size:0.78rem;color:#94a3b8;text-align:center;padding:10px;">No QR Uploaded</span>
+            </div>
+            <div style="flex:1;min-width:240px;">
+              <div class="eg" style="margin-bottom:12px;">
+                <label>Select New QR Code Image (PNG / JPG)</label>
+                <input type="file" id="qrFileInput" accept="image/*" onchange="previewSelectedQR(this)">
+              </div>
+              <button class="svb" type="button" onclick="uploadQR()" id="upQrBtn">
+                <i class="fab fa-google-drive"></i> Upload &amp; Save QR to Google Drive
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Landing Page Content Editor -->
+        <div class="ce">
+          <h3 style="color:#1a237e;margin-bottom:20px;"><i class="fas fa-edit" style="margin-right:8px;"></i>Edit Landing Page Content</h3>
+          <div class="eg"><label>Title</label><input type="text" id="eT"></div>
+          <div class="eg"><label>Subtitle</label><input type="text" id="eSt"></div>
+          <div class="eg"><label>School Name</label><input type="text" id="eSn"></div>
+          <div class="eg"><label>Announcement</label><textarea id="eAn"></textarea></div>
+          <h4 style="color:#374151;margin:20px 0 15px;">Exam Dates</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="eg"><label>IEO</label><input type="text" id="eIEO"></div><div class="eg"><label>ISO</label><input type="text" id="eISO"></div>
+            <div class="eg"><label>IMO</label><input type="text" id="eIMO"></div><div class="eg"><label>ICSO</label><input type="text" id="eICSO"></div>
+            <div class="eg"><label>ISSO</label><input type="text" id="eISSO"></div><div class="eg"><label>IHO</label><input type="text" id="eIHO"></div>
+          </div>
+          <div class="eg" style="margin-top:15px;"><label>Fee Note</label><textarea id="eFN"></textarea></div>
+          <div class="eg"><label>Payment Instruction</label><textarea id="ePI"></textarea></div>
+          <button class="svb" onclick="saveLC()" id="slcBtn"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Student -->
+  <div class="modal-overlay" id="editM">
+    <div class="dm">
+      <div class="mh"><h3><i class="fas fa-user-edit" style="margin-right:8px;"></i>Edit Student</h3><button class="mx" onclick="clM('editM')">&times;</button></div>
+      <div class="mb">
+        <input type="hidden" id="eTID">
+        <div class="mfg"><label>Name</label><input type="text" id="eSN"></div>
+        <div class="mfr">
+          <div class="mfg"><label>Class</label><select id="eCN" onchange="oECC()"></select></div>
+          <div class="mfg"><label>Section</label><select id="eSC"></select></div>
+        </div>
+        <div class="mfg"><label>Mobile</label><input type="text" id="eMB"></div>
+        <div class="mfg">
+          <label>Olympiads</label>
+          <div class="mcg">
+            <div class="mci"><input type="checkbox" id="eIEO2"><label>IEO</label></div>
+            <div class="mci"><input type="checkbox" id="eISO2"><label>ISO</label></div>
+            <div class="mci"><input type="checkbox" id="eIMO2"><label>IMO</label></div>
+            <div class="mci"><input type="checkbox" id="eICSO2"><label>ICSO</label></div>
+            <div class="mci"><input type="checkbox" id="eISSO2"><label>ISSO</label></div>
+            <div class="mci"><input type="checkbox" id="eIHO2"><label>IHO</label></div>
+          </div>
+        </div>
+        <div class="mfr">
+          <div class="mfg">
+            <label>Payment Mode</label>
+            <select id="ePM" onchange="toggleEditUTR()">
+              <option value="UPI">UPI</option>
+              <option value="Cash">Cash</option>
+            </select>
+          </div>
+          <div class="mfg" id="eUTRGroup">
+            <label>UTR / Transaction No.</label>
+            <input type="text" id="eUTR" placeholder="Enter UTR No.">
+          </div>
+        </div>
+      </div>
+      <div class="mf"><button class="modal-btn secondary" onclick="clM('editM')">Cancel</button><button class="modal-btn primary" onclick="saveSE()" id="seBtn">Save</button></div>
+    </div>
+  </div>
+
+  <!-- Add Class -->
+  <div class="modal-overlay" id="acM"><div class="dm" style="max-width:400px;"><div class="mh"><h3><i class="fas fa-plus-circle" style="margin-right:8px;"></i>Add Class</h3><button class="mx" onclick="clM('acM')">&times;</button></div><div class="mb"><div class="mfg"><label>Class</label><input type="text" id="nCN" placeholder="e.g. 5"></div><div class="mfg"><label>Sections</label><input type="text" id="nCS" value="A" placeholder="A,B,C"></div></div><div class="mf"><button class="modal-btn secondary" onclick="clM('acM')">Cancel</button><button class="modal-btn primary" onclick="addNC()">Add</button></div></div></div>
+  <!-- Edit Class -->
+  <div class="modal-overlay" id="ecM"><div class="dm" style="max-width:400px;"><div class="mh"><h3><i class="fas fa-edit" style="margin-right:8px;"></i>Edit Class</h3><button class="mx" onclick="clM('ecM')">&times;</button></div><div class="mb"><input type="hidden" id="ecON"><div class="mfg"><label>Class</label><input type="text" id="ecDN" disabled style="background:#f1f5f9;"></div><div class="mfg"><label>Sections</label><input type="text" id="ecSC"></div><div class="mfg"><label>Status</label><select id="ecAC"><option value="Yes">Active</option><option value="No">Inactive</option></select></div></div><div class="mf"><button class="modal-btn secondary" onclick="clM('ecM')">Cancel</button><button class="modal-btn primary" onclick="saveCE()">Save</button></div></div></div>
+  <!-- Receipt Modal -->
+  <div class="receipt-modal-overlay" id="rcM"><div class="receipt-modal"><div class="receipt-modal-header"><h3><i class="fas fa-receipt"></i> Receipt</h3><button class="receipt-modal-close" onclick="clM('rcM')">&times;</button></div><div class="receipt-modal-body" id="rcC"><div class="lc2"><div class="spinner"></div></div></div><div class="receipt-modal-footer"><button class="modal-btn secondary" onclick="clM('rcM')">Close</button><button class="modal-btn primary" onclick="printReceiptContent()"><i class="fas fa-print"></i> Print</button></div></div></div>
+
+  <script src="js/api.js"></script>
+  <script>
+    var allRegs=[],allCls=[];
+    if(!checkAdminSession()){window.location.href='admin.html';}
+    window.addEventListener('DOMContentLoaded',function(){loadAll();});
+
+    function swTab(t){document.querySelectorAll('.tc').forEach(function(e){e.classList.remove('active');});document.querySelectorAll('.ni').forEach(function(e){e.classList.remove('active');});document.getElementById('tab-'+t).classList.add('active');document.querySelector('[data-tab="'+t+'"]').classList.add('active');var titles={dashboard:'Dashboard',registrations:'Registrations',classes:'Classes & Sections',landing:'Edit Landing & QR Code'};document.getElementById('pgTitle').textContent=titles[t]||'Dashboard';if(t==='landing')loadLC();document.getElementById('sidebar').classList.remove('open');}
+    function clM(id){document.getElementById(id).classList.remove('show');}
+    function logout(){clearAdminSession();window.location.href='admin.html';}
+    function refreshData(){showToast('Refreshing...');loadAll();}
+
+    async function loadAll(){
+      try{var st=await apiGet('getDashboardStats');document.getElementById('sT').textContent=st.total;document.getElementById('sV').textContent=st.verified;document.getElementById('sP').textContent=st.pending;document.getElementById('sR').textContent='₹'+st.totalRevenue.toLocaleString();var oc=st.olympiadCounts;document.getElementById('oSC').innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;">'+['IEO','ISO','IMO','ICSO','ISSO','IHO'].map(function(o){return'<div style="text-align:center;padding:15px;background:#e8eaf6;border-radius:10px;"><div style="font-size:1.5rem;font-weight:700;color:#1a237e;">'+oc[o]+'</div><div style="font-size:0.8rem;color:#64748b;">'+o+'</div></div>';}).join('')+'</div>';}catch(e){console.error(e);}
+      loadRegs();loadCls();
+    }
+
+    async function loadRegs(){try{allRegs=await apiGet('getRegistrations');renderRT(allRegs);}catch(e){console.error(e);}}
+
+    function renderRT(regs){
+      var tb=document.getElementById('rtb');
+      if(!regs||!regs.length){tb.innerHTML='<tr><td colspan="8" class="nd2"><i class="fas fa-inbox"></i><br>No registrations</td></tr>';return;}
+      tb.innerHTML='';
+      regs.forEach(function(r){
+        var ol=[];if(r.ieo==='Yes')ol.push('IEO');if(r.iso==='Yes')ol.push('ISO');if(r.imo==='Yes')ol.push('IMO');if(r.icso==='Yes')ol.push('ICSO');if(r.isso==='Yes')ol.push('ISSO');if(r.iho==='Yes')ol.push('IHO');
+        var sb=r.paymentVerified==='Yes'?'<span class="bg v">✓ Verified</span>':'<span class="bg p">⏳ Pending</span>';
+        var ob=ol.map(function(o){return'<span class="bg o">'+o+'</span>';}).join(' ');
+        var payCol = '<div><strong>' + r.paymentMode + '</strong></div>' + (r.paymentMode === 'UPI' && r.utrNo ? '<div class="utr-tag">UTR: ' + r.utrNo + '</div>' : '');
+        var vb=r.paymentVerified==='Yes'?'<button class="ab uv" onclick="uvP(\''+r.trackingId+'\')"><i class="fas fa-undo"></i></button>':'<button class="ab vf" onclick="vP(\''+r.trackingId+'\')"><i class="fas fa-check"></i> Verify</button>';
+        var rb=r.paymentVerified==='Yes'?'<button class="ab rc" onclick="showRC(\''+r.trackingId+'\')"><i class="fas fa-receipt"></i></button>':'';
+        var tr=document.createElement('tr');
+        tr.innerHTML='<td><strong>'+r.trackingId+'</strong></td><td>'+r.studentName+'</td><td>'+r.className+'-'+r.section+'</td><td>'+r.mobile+'</td><td>'+ob+'</td><td>'+payCol+'</td><td>'+sb+'</td><td style="white-space:nowrap;">'+vb+'<button class="ab ed" onclick="editS(\''+r.trackingId+'\')"><i class="fas fa-edit"></i></button>'+rb+'<button class="ab dl" onclick="delR(\''+r.trackingId+'\')"><i class="fas fa-trash"></i></button></td>';
+        tb.appendChild(tr);
+      });
+    }
+
+    function filterTbl(){
+      var s=document.getElementById('searchIn').value.toLowerCase();
+      var st=document.getElementById('filterSt').value;
+      renderRT(allRegs.filter(function(r){
+        var ms=r.studentName.toLowerCase().includes(s)||r.trackingId.toLowerCase().includes(s)||(r.utrNo && r.utrNo.toLowerCase().includes(s));
+        var mst=st==='all'||(st==='verified'&&r.paymentVerified==='Yes')||(st==='pending'&&r.paymentVerified!=='Yes');
+        return ms&&mst;
+      }));
+    }
+
+    async function vP(id){if(!confirm('Verify payment for '+id+'?'))return;var r=await apiPost('verifyPayment',{trackingId:id});showToast(r.message,r.success?'success':'error');if(r.success)loadAll();}
+    async function uvP(id){if(!confirm('Revoke for '+id+'?'))return;var r=await apiPost('unverifyPayment',{trackingId:id});showToast(r.message,r.success?'success':'error');if(r.success)loadAll();}
+
+    function toggleEditUTR(){
+      var pm = document.getElementById('ePM').value;
+      document.getElementById('eUTRGroup').style.display = (pm === 'UPI') ? 'block' : 'none';
+    }
+
+    function editS(tid){
+      var rg=allRegs.find(function(r){return r.trackingId===tid;});if(!rg)return;
+      document.getElementById('eTID').value=rg.trackingId;document.getElementById('eSN').value=rg.studentName;document.getElementById('eMB').value=rg.mobile;
+      document.getElementById('eIEO2').checked=rg.ieo==='Yes';document.getElementById('eISO2').checked=rg.iso==='Yes';document.getElementById('eIMO2').checked=rg.imo==='Yes';document.getElementById('eICSO2').checked=rg.icso==='Yes';document.getElementById('eISSO2').checked=rg.isso==='Yes';document.getElementById('eIHO2').checked=rg.iho==='Yes';
+      document.getElementById('ePM').value=rg.paymentMode;
+      document.getElementById('eUTR').value=rg.utrNo||'';
+      toggleEditUTR();
+      var cs=document.getElementById('eCN');cs.innerHTML='<option value="">Select</option>';
+      allCls.forEach(function(c){var o=document.createElement('option');o.value=c.className;o.textContent='Class '+c.className;if(c.className===rg.className)o.selected=true;cs.appendChild(o);});
+      oECC(rg.section);document.getElementById('editM').classList.add('show');
+    }
+
+    function oECC(pre){var v=document.getElementById('eCN').value;var ss=document.getElementById('eSC');ss.innerHTML='<option value="">Select</option>';var cd=allCls.find(function(c){return c.className===v;});if(cd){cd.sections.split(',').map(function(s){return s.trim();}).forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;if(pre&&s===pre)o.selected=true;ss.appendChild(o);});}}
+
+    async function saveSE(){
+      var pm = document.getElementById('ePM').value;
+      var utr = document.getElementById('eUTR').value.trim();
+      if(pm === 'UPI' && !utr){ alert('Please enter UTR / Transaction No. for UPI payment.'); return; }
+      var btn=document.getElementById('seBtn');btn.textContent='Saving...';btn.disabled=true;
+      var d={studentName:document.getElementById('eSN').value,className:document.getElementById('eCN').value,section:document.getElementById('eSC').value,mobile:document.getElementById('eMB').value,ieo:document.getElementById('eIEO2').checked,iso:document.getElementById('eISO2').checked,imo:document.getElementById('eIMO2').checked,icso:document.getElementById('eICSO2').checked,isso:document.getElementById('eISSO2').checked,iho:document.getElementById('eIHO2').checked,paymentMode:pm,utrNo:utr};
+      var r=await apiPost('updateStudent',{trackingId:document.getElementById('eTID').value,updatedData:d});
+      btn.textContent='Save';btn.disabled=false;showToast(r.message,r.success?'success':'error');if(r.success){clM('editM');loadAll();}
+    }
+
+    async function delR(id){if(!confirm('Delete '+id+'?'))return;var r=await apiPost('deleteRegistration',{trackingId:id});showToast(r.message,r.success?'success':'error');if(r.success)loadAll();}
+
+    async function showRC(id){document.getElementById('rcC').innerHTML='<div class="lc2"><div class="spinner"></div></div>';document.getElementById('rcM').classList.add('show');var r=await apiPost('generateReceipt',{trackingId:id});if(r.success){document.getElementById('rcC').innerHTML=buildReceiptHTML(r.receipt);}else{document.getElementById('rcC').innerHTML='<p style="color:#ef4444;text-align:center;padding:20px;">'+r.message+'</p>';}}
+
+    async function loadCls(){allCls=await apiGet('getClasses');renderCG(allCls);}
+
+    function renderCG(cls){var g=document.getElementById('cGrid');if(!cls||!cls.length){g.innerHTML='<div class="nd2">No classes</div>';return;}g.innerHTML='';cls.forEach(function(c){var d=document.createElement('div');d.className='cc '+(c.active==='Yes'?'ac':'ia');d.innerHTML='<div class="ct">Class '+c.className+'</div><div class="cs">Sections: '+c.sections+'</div><div class="cs">'+(c.active==='Yes'?'🟢 Active':'🔴 Inactive')+'</div><div class="cca"><button class="ab ed" onclick="editCl(\''+c.className+'\',\''+c.sections+'\',\''+c.active+'\')"><i class="fas fa-edit"></i></button><button class="ab dl" onclick="delCl(\''+c.className+'\')"><i class="fas fa-trash"></i></button></div>';g.appendChild(d);});}
+
+    function showACM(){document.getElementById('nCN').value='';document.getElementById('nCS').value='A';document.getElementById('acM').classList.add('show');}
+    async function addNC(){var r=await apiPost('addClass',{className:document.getElementById('nCN').value.trim(),sections:document.getElementById('nCS').value.trim()});showToast(r.message,r.success?'success':'error');if(r.success){clM('acM');loadCls();}}
+    function editCl(n,s,a){document.getElementById('ecON').value=n;document.getElementById('ecDN').value='Class '+n;document.getElementById('ecSC').value=s;document.getElementById('ecAC').value=a;document.getElementById('ecM').classList.add('show');}
+    async function saveCE(){var r=await apiPost('updateClass',{className:document.getElementById('ecON').value,sections:document.getElementById('ecSC').value.trim(),active:document.getElementById('ecAC').value});showToast(r.message,r.success?'success':'error');if(r.success){clM('ecM');loadCls();}}
+    async function delCl(n){if(!confirm('Delete Class '+n+'?'))return;var r=await apiPost('deleteClass',{className:n});showToast(r.message,r.success?'success':'error');if(r.success)loadCls();}
+
+    async function loadLC(){
+      var c=await apiGet('getLandingContent');
+      if(c){
+        document.getElementById('eT').value=c.title||'';
+        document.getElementById('eSt').value=c.subtitle||'';
+        document.getElementById('eSn').value=c.school_name||'';
+        document.getElementById('eAn').value=c.announcement||'';
+        document.getElementById('eIEO').value=formatISODate(c.IEO_date)||'';
+        document.getElementById('eISO').value=formatISODate(c.ISO_date)||'';
+        document.getElementById('eIMO').value=formatISODate(c.IMO_date)||'';
+        document.getElementById('eICSO').value=formatISODate(c.ICSO_date)||'';
+        document.getElementById('eISSO').value=formatISODate(c.ISSO_date)||'';
+        document.getElementById('eIHO').value=formatISODate(c.IHO_date)||'';
+        document.getElementById('eFN').value=c.fee_note||'';
+        document.getElementById('ePI').value=c.payment_instruction||'';
+        if(c.qr_code_url){
+          document.getElementById('adminQrPreview').innerHTML='<img src="'+c.qr_code_url+'" alt="Current QR">';
+        }
+      }
+    }
+
+    function previewSelectedQR(input){
+      if(input.files && input.files[0]){
+        var reader = new FileReader();
+        reader.onload = function(e){
+          document.getElementById('adminQrPreview').innerHTML = '<img src="' + e.target.result + '" alt="QR Preview">';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    async function uploadQR(){
+      var fileInput = document.getElementById('qrFileInput');
+      if(!fileInput.files || !fileInput.files[0]){
+        showToast('Please select a QR code image first!', 'error');
+        return;
+      }
+      var file = fileInput.files[0];
+      var btn = document.getElementById('upQrBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner white"></div> Uploading to Google Drive...';
+
+      var reader = new FileReader();
+      reader.onload = async function(e){
+        try {
+          var res = await apiPost('uploadQRCode', {
+            base64Data: e.target.result,
+            fileName: 'SOF_UPI_QR_' + Date.now() + '_' + file.name,
+            mimeType: file.type
+          });
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fab fa-google-drive"></i> Upload & Save QR to Google Drive';
+          showToast(res.message, res.success ? 'success' : 'error');
+          if(res.success && res.qrUrl){
+            document.getElementById('adminQrPreview').innerHTML = '<img src="' + res.qrUrl + '" alt="Current QR">';
+            fileInput.value = '';
+          }
+        } catch(err){
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fab fa-google-drive"></i> Upload & Save QR to Google Drive';
+          showToast('Error uploading QR code', 'error');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function saveLC(){var btn=document.getElementById('slcBtn');btn.textContent='Saving...';btn.disabled=true;var o={title:document.getElementById('eT').value,subtitle:document.getElementById('eSt').value,school_name:document.getElementById('eSn').value,announcement:document.getElementById('eAn').value,IEO_date:document.getElementById('eIEO').value,ISO_date:document.getElementById('eISO').value,IMO_date:document.getElementById('eIMO').value,ICSO_date:document.getElementById('eICSO').value,ISSO_date:document.getElementById('eISSO').value,IHO_date:document.getElementById('eIHO').value,fee_note:document.getElementById('eFN').value,payment_instruction:document.getElementById('ePI').value};var r=await apiPost('updateLandingContent',{contentObj:o});btn.innerHTML='<i class="fas fa-save"></i> Save Changes';btn.disabled=false;showToast(r.success?'Saved!':'Error',r.success?'success':'error');}
+  </script>
+</body>
+</html>

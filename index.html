@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOF Olympiad 2026-27 | DAV NTPC</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-top">
+      <div class="logo-section">
+        <img src="images/sof-logo.png" alt="SOF Logo"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><rect fill=%22%23e8eaf6%22 width=%2264%22 height=%2264%22 rx=%2232%22/><text x=%2232%22 y=%2238%22 text-anchor=%22middle%22 fill=%22%231a237e%22 font-size=%2216%22 font-weight=%22bold%22 font-family=%22Arial%22>SOF</text></svg>'">
+        <div class="header-text">
+          <h1>Science Olympiad Foundation</h1>
+          <p id="schoolNameHeader">DAV Public School, NTPC</p>
+        </div>
+        <img src="images/dav-logo.png" alt="DAV Logo"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><rect fill=%22%23e8eaf6%22 width=%2264%22 height=%2264%22 rx=%2232%22/><text x=%2232%22 y=%2235%22 text-anchor=%22middle%22 fill=%22%231a237e%22 font-size=%2212%22 font-weight=%22bold%22 font-family=%22Arial%22>DAV</text><text x=%2232%22 y=%2250%22 text-anchor=%22middle%22 fill=%22%231a237e%22 font-size=%2210%22 font-family=%22Arial%22>NTPC</text></svg>'">
+      </div>
+      <div class="header-nav">
+        <a class="nav-btn primary" href="register.html">
+          <i class="fas fa-user-plus"></i> Register Now
+        </a>
+        <a class="nav-btn" href="admin.html">
+          <i class="fas fa-lock"></i> Admin
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="hero">
+      <h2 id="heroTitle">SOF Exam Schedule 2026-27</h2>
+      <p id="heroSubtitle">Schedule of Olympiad exams for 2026-27 is as under.</p>
+    </div>
+
+    <div class="announcement">
+      <i class="fas fa-bullhorn"></i>
+      <p id="announcementText">Registrations are now open for SOF Olympiad 2026-27. Register early to secure your participation!</p>
+    </div>
+
+    <div class="schedule-section">
+      <div class="schedule-header">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Olympiad Exam Schedule</h3>
+      </div>
+      <div class="schedule-list">
+        <div class="schedule-item">
+          <div class="exam-info"><span class="exam-badge">IEO</span><span class="exam-name">International English Olympiad</span></div>
+          <span class="exam-date" id="ieoDate">17 Nov 2026</span>
+        </div>
+        <div class="schedule-item">
+          <div class="exam-info"><span class="exam-badge">ISSO</span><span class="exam-name">International Social Science Olympiad</span></div>
+          <span class="exam-date" id="issoDate">30 Nov 2026</span>
+        </div>
+        <div class="schedule-item">
+          <div class="exam-info"><span class="exam-badge">ISO</span><span class="exam-name">International Science Olympiad</span></div>
+          <span class="exam-date" id="isoDate">3 Dec 2026</span>
+        </div>
+        <div class="schedule-item">
+          <div class="exam-info"><span class="exam-badge">IMO</span><span class="exam-name">International Mathematics Olympiad</span></div>
+          <span class="exam-date" id="imoDate">10 Dec 2026</span>
+        </div>
+        <div class="schedule-item">
+          <div class="exam-info"><span class="exam-badge">ICSO</span><span class="exam-name">International Computer Science Olympiad</span></div>
+          <span class="exam-date" id="icsoDate">17 Dec 2026</span>
+        </div>
+        <div class="schedule-item">
+          <div class="exam-info"><span class="exam-badge">IHO</span><span class="exam-name">International Hindi Olympiad</span></div>
+          <span class="exam-date" id="ihoDate">22 Jan 2027</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <h4><i class="fas fa-rupee-sign"></i> Registration Fee</h4>
+        <p id="feeNoteText">The participating student shall deposit <span class="fee-highlight">₹200</span> per Olympiad exam with the school.</p>
+      </div>
+      <div class="info-card">
+        <h4><i class="fas fa-wallet"></i> Payment Mode</h4>
+        <p id="paymentInstructionText">Payment to be done in school either by UPI or Cash. Payment will be verified by the school administration.</p>
+      </div>
+    </div>
+
+    <!-- Track Registration with Receipt -->
+    <div class="track-section">
+      <h4><i class="fas fa-search"></i> Track Your Registration</h4>
+      <div class="track-form">
+        <input type="text" id="trackInput" placeholder="Enter your Tracking ID (e.g., SOF260001)">
+        <button onclick="trackRegistration()" id="trackBtn"><i class="fas fa-search"></i> Track</button>
+      </div>
+      <div class="track-result" id="trackResult"></div>
+    </div>
+
+    <div class="cta-section">
+      <h3>Ready to Participate?</h3>
+      <p>Register now for SOF Olympiad 2026-27 and showcase your talent!</p>
+      <a class="cta-btn" href="register.html"><i class="fas fa-user-plus"></i> Register Now</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2026-27 Science Olympiad Foundation | DAV Public School, NTPC</p>
+    <p style="margin-top:5px"><a href="admin.html">Admin Panel</a></p>
+  </footer>
+
+  <!-- Receipt Modal (for student tracking) -->
+  <div class="receipt-modal-overlay" id="studentReceiptModal">
+    <div class="receipt-modal">
+      <div class="receipt-modal-header">
+        <h3><i class="fas fa-receipt"></i> Payment Receipt</h3>
+        <button class="receipt-modal-close" onclick="document.getElementById('studentReceiptModal').classList.remove('show')">&times;</button>
+      </div>
+      <div class="receipt-modal-body" id="studentReceiptContent">
+        <div style="text-align:center;padding:30px;"><div class="spinner"></div></div>
+      </div>
+      <div class="receipt-modal-footer">
+        <button class="modal-btn secondary" onclick="document.getElementById('studentReceiptModal').classList.remove('show')">Close</button>
+        <button class="modal-btn primary" onclick="printReceiptContent()"><i class="fas fa-print"></i> Print</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Load dynamic content
+    window.addEventListener('DOMContentLoaded', async function () {
+      try {
+        const c = await apiGet('getLandingContent');
+        if (c) {
+          if (c.title) document.getElementById('heroTitle').textContent = c.title;
+          if (c.subtitle) document.getElementById('heroSubtitle').textContent = c.subtitle;
+          if (c.IEO_date) document.getElementById('ieoDate').textContent = c.IEO_date;
+          if (c.ISO_date) document.getElementById('isoDate').textContent = c.ISO_date;
+          if (c.IMO_date) document.getElementById('imoDate').textContent = c.IMO_date;
+          if (c.ICSO_date) document.getElementById('icsoDate').textContent = c.ICSO_date;
+          if (c.ISSO_date) document.getElementById('issoDate').textContent = c.ISSO_date;
+          if (c.IHO_date) document.getElementById('ihoDate').textContent = c.IHO_date;
+          if (c.school_name) document.getElementById('schoolNameHeader').textContent = c.school_name;
+          if (c.announcement) document.getElementById('announcementText').textContent = c.announcement;
+          if (c.fee_note) document.getElementById('feeNoteText').innerHTML = c.fee_note.replace('₹200', '<span class="fee-highlight">₹200</span>');
+          if (c.payment_instruction) document.getElementById('paymentInstructionText').textContent = c.payment_instruction;
+        }
+      } catch (e) {
+        console.log('Using default content.');
+      }
+    });
+
+    async function trackRegistration() {
+      const trackingId = document.getElementById('trackInput').value.trim().toUpperCase();
+      const resultDiv = document.getElementById('trackResult');
+
+      if (!trackingId) {
+        resultDiv.className = 'track-result show error';
+        resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter a Tracking ID.';
+        return;
+      }
+
+      resultDiv.className = 'track-result show loading';
+      resultDiv.innerHTML = '<div class="spinner"></div><p style="margin-top:8px;color:#64748b;">Searching...</p>';
+
+      try {
+        const result = await apiGet('getStudentByTrackingId', { trackingId: trackingId });
+
+        if (result.success) {
+          const s = result.student;
+          const isVerified = s.paymentVerified === 'Yes';
+          const statusHTML = isVerified
+            ? '<span class="track-status verified">✅ Payment Verified</span>'
+            : '<span class="track-status pending">⏳ Payment Pending</span>';
+
+          let actionsHTML = '';
+          if (isVerified) {
+            actionsHTML = `
+              <div class="track-actions">
+                <button class="track-btn receipt-btn" onclick="viewStudentReceipt('${s.trackingId}')">
+                  <i class="fas fa-receipt"></i> View Receipt
+                </button>
+                <button class="track-btn print-btn" onclick="downloadStudentReceipt('${s.trackingId}')">
+                  <i class="fas fa-download"></i> Download / Print
+                </button>
+              </div>
+            `;
+          } else {
+            actionsHTML = `
+              <div class="track-actions">
+                <p style="color:#92400e;font-size:0.85rem;">
+                  <i class="fas fa-info-circle"></i>
+                  Receipt will be available once payment is verified by the school.
+                  Please submit your payment at the school.
+                </p>
+              </div>
+            `;
+          }
+
+          resultDiv.className = 'track-result show success';
+          resultDiv.innerHTML = `
+            <div class="track-info-grid">
+              <div><strong>Name:</strong> ${s.studentName}</div>
+              <div><strong>Class:</strong> ${s.className} - ${s.section}</div>
+              <div><strong>Tracking ID:</strong> <strong style="color:#1a237e;">${s.trackingId}</strong></div>
+              <div><strong>Registered:</strong> ${s.regDate}</div>
+              <div><strong>Olympiads:</strong> ${s.olympiads.join(', ')}</div>
+              <div><strong>Total Fee:</strong> ₹${s.totalAmount}</div>
+              <div><strong>Payment Mode:</strong> ${s.paymentMode}</div>
+              <div><strong>Status:</strong> ${statusHTML}</div>
+            </div>
+            ${actionsHTML}
+          `;
+        } else {
+          resultDiv.className = 'track-result show error';
+          resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + result.message;
+        }
+      } catch (e) {
+        resultDiv.className = 'track-result show error';
+        resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error connecting to server. Please try again.';
+      }
+    }
+
+    async function viewStudentReceipt(trackingId) {
+      const modal = document.getElementById('studentReceiptModal');
+      const content = document.getElementById('studentReceiptContent');
+      content.innerHTML = '<div style="text-align:center;padding:30px;"><div class="spinner"></div><p style="margin-top:10px;color:#64748b;">Generating receipt...</p></div>';
+      modal.classList.add('show');
+
+      try {
+        const result = await apiGet('getReceiptByTrackingId', { trackingId: trackingId });
+        if (result.success) {
+          content.innerHTML = buildReceiptHTML(result.receipt);
+        } else {
+          content.innerHTML = '<p style="color:#ef4444;text-align:center;padding:20px;"><i class="fas fa-exclamation-triangle"></i> ' + result.message + '</p>';
+        }
+      } catch (e) {
+        content.innerHTML = '<p style="color:#ef4444;text-align:center;padding:20px;">Error loading receipt.</p>';
+      }
+    }
+
+    async function downloadStudentReceipt(trackingId) {
+      try {
+        const result = await apiGet('getReceiptByTrackingId', { trackingId: trackingId });
+        if (result.success) {
+          // Put receipt in modal then print
+          document.getElementById('studentReceiptContent').innerHTML = buildReceiptHTML(result.receipt);
+          document.getElementById('studentReceiptModal').classList.add('show');
+          setTimeout(() => { printReceiptContent(); }, 500);
+        } else {
+          alert(result.message);
+        }
+      } catch (e) {
+        alert('Error generating receipt.');
+      }
+    }
+  </script>
+</body>
+</html>

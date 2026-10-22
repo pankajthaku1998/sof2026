@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOF Registration Form</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .form-card{max-width:700px;margin:30px auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 20px rgba(0,0,0,0.08);border:1px solid #e2e8f0;}
+    .form-header{background:linear-gradient(135deg,#1a237e,#3949ab);color:white;padding:25px 30px;text-align:center;}
+    .form-header h2{font-size:1.3rem;margin-bottom:5px;}.form-header p{opacity:0.85;font-size:0.88rem;}
+    .form-body{padding:30px;}
+    .fg{margin-bottom:22px;}.fg label{display:block;font-weight:600;font-size:0.88rem;color:#374151;margin-bottom:7px;}
+    .fg .req{color:#ef4444;}
+    .fg input[type="text"],.fg input[type="tel"],.fg select{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:0.95rem;font-family:'Inter',sans-serif;outline:none;transition:all 0.3s;background:#fafbfc;}
+    .fg input:focus,.fg select:focus{border-color:#3949ab;background:white;box-shadow:0 0 0 3px rgba(57,73,171,0.1);}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+    .olympiad-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .olym-box{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all 0.3s;}
+    .olym-box:hover{border-color:#3949ab;background:#f0f2ff;}
+    .olym-box.checked{border-color:#3949ab;background:#e8eaf6;}
+    .olym-box.disabled{opacity:0.45;cursor:not-allowed;pointer-events:none;}
+    .olym-box input[type="checkbox"]{width:18px;height:18px;accent-color:#1a237e;cursor:pointer;}
+    .olym-box .o-label{font-weight:600;color:#1a237e;font-size:0.85rem;}
+    .olym-box .o-name{font-size:0.75rem;color:#64748b;}
+    .olym-box .o-note{font-size:0.65rem;color:#ef4444;font-weight:500;}
+    .pay-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .pay-opt{display:flex;align-items:center;gap:12px;padding:16px 20px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all 0.3s;}
+    .pay-opt:hover{border-color:#3949ab;}.pay-opt.selected{border-color:#1a237e;background:#e8eaf6;}
+    .pay-opt input[type="radio"]{width:18px;height:18px;accent-color:#1a237e;cursor:pointer;}
+    .pay-opt i{font-size:1.2rem;color:#1a237e;}
+    .fee-bar{background:#f0f4ff;border:2px solid #c5cae9;border-radius:12px;padding:18px 22px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;}
+    .fee-bar .f-label{font-weight:500;color:#374151;}.fee-bar .f-amount{font-size:1.4rem;font-weight:700;color:#1a237e;}
+
+    /* Dynamic UPI & Cash Panels */
+    .upi-panel{display:none;background:#f8faff;border:2px solid #3949ab;border-radius:14px;padding:22px;margin-bottom:22px;animation:slideUp 0.25s ease;}
+    .upi-panel.show{display:block;}
+    .qr-wrap{text-align:center;margin-bottom:18px;}
+    .qr-wrap h4{color:#1a237e;font-size:1rem;margin-bottom:6px;}
+    .qr-wrap p{color:#64748b;font-size:0.84rem;margin-bottom:12px;}
+    .qr-img-box{display:inline-flex;align-items:center;justify-content:center;background:white;padding:14px;border-radius:12px;border:2px dashed #c5cae9;min-width:210px;min-height:210px;box-shadow:0 4px 12px rgba(26,35,126,0.08);}
+    .qr-img-box img{max-width:220px;max-height:220px;object-fit:contain;border-radius:8px;}
+    .qr-pay-badge{display:inline-block;margin-top:10px;background:#e8eaf6;color:#1a237e;padding:6px 16px;border-radius:20px;font-weight:700;font-size:0.9rem;}
+
+    .cash-panel{display:none;background:#f0fdf4;border:2px solid #86efac;border-radius:12px;padding:18px 20px;margin-bottom:22px;color:#166534;font-size:0.88rem;line-height:1.6;animation:slideUp 0.25s ease;}
+    .cash-panel.show{display:flex;align-items:flex-start;gap:12px;}
+    .cash-panel i{font-size:1.3rem;color:#16a34a;margin-top:2px;flex-shrink:0;}
+
+    .note-box{background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:16px 20px;margin-bottom:22px;font-size:0.85rem;color:#92400e;line-height:1.6;}
+    .note-box i{color:#f59e0b;margin-right:6px;}
+    .consent-box{display:flex;align-items:flex-start;gap:12px;padding:16px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;margin-bottom:25px;}
+    .consent-box input{margin-top:3px;width:18px;height:18px;accent-color:#1a237e;flex-shrink:0;cursor:pointer;}
+    .consent-box label{font-size:0.85rem;color:#4b5563;line-height:1.6;cursor:pointer;}
+    .submit-btn{width:100%;padding:15px;background:linear-gradient(135deg,#1a237e,#3949ab);color:white;border:none;border-radius:12px;font-size:1.05rem;font-weight:600;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Inter',sans-serif;}
+    .submit-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,35,126,0.3);}
+    .submit-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+    .err{color:#ef4444;font-size:0.78rem;margin-top:4px;display:none;}
+    .success-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center;}
+    .success-modal.show{display:flex;}
+    .sm-box{background:white;border-radius:20px;padding:40px;max-width:480px;width:90%;text-align:center;animation:slideUp 0.3s ease;}
+    .sm-box .s-icon{width:70px;height:70px;background:#e8f5e9;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+    .sm-box .s-icon i{font-size:2rem;color:#4caf50;}
+    .sm-box h3{color:#1a237e;margin-bottom:10px;font-size:1.3rem;}
+    .sm-box .tid{background:#e8eaf6;padding:15px 25px;border-radius:10px;margin:15px 0;font-size:1.5rem;font-weight:700;color:#1a237e;letter-spacing:2px;}
+    .sm-box p{color:#64748b;font-size:0.9rem;line-height:1.6;margin-bottom:8px;}
+    .s-btns{display:flex;gap:10px;margin-top:20px;justify-content:center;}
+    @media(max-width:600px){.form-row,.olympiad-grid,.pay-options{grid-template-columns:1fr;}.form-body{padding:20px;}}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-top">
+      <div class="logo-section">
+        <img src="https://sofworld.org/sites/default/files/SOF%20Logo%20100.png" alt="SOF Logo"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><rect fill=%22%23e8eaf6%22 width=%2264%22 height=%2264%22 rx=%2232%22/><text x=%2232%22 y=%2238%22 text-anchor=%22middle%22 fill=%22%231a237e%22 font-size=%2216%22 font-weight=%22bold%22 font-family=%22Arial%22>SOF</text></svg>'">
+        <div class="header-text"><h1>SOF Olympiad Registration</h1><p>DAV Public School, NTPC</p></div>
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/DAV_Emblem.png/150px-DAV_Emblem.png" alt="DAV Logo"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><rect fill=%22%23e8eaf6%22 width=%2264%22 height=%2264%22 rx=%2232%22/><text x=%2232%22 y=%2238%22 text-anchor=%22middle%22 fill=%22%231a237e%22 font-size=%2212%22 font-weight=%22bold%22 font-family=%22Arial%22>DAV</text></svg>'">
+      </div>
+      <a class="nav-btn" href="index.html"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+  </header>
+
+  <div style="max-width:700px;margin:0 auto;padding:0 20px;">
+    <div class="form-card">
+      <div class="form-header"><h2><i class="fas fa-clipboard-list"></i> Registration Form 2026-27</h2><p>Fill in the details below to register for SOF Olympiad</p></div>
+      <div class="form-body">
+        <form id="regForm" onsubmit="submitForm(event)">
+          <div class="fg"><label>Student Name <span class="req">*</span></label><input type="text" id="studentName" placeholder="Enter student's full name" required><div class="err" id="nameErr">Please enter student name</div></div>
+          <div class="form-row">
+            <div class="fg"><label>Class <span class="req">*</span></label><select id="className" required onchange="onClassChange()"><option value="">Select Class</option></select><div class="err" id="classErr">Please select a class</div></div>
+            <div class="fg"><label>Section <span class="req">*</span></label><select id="section" required><option value="">Select Section</option></select><div class="err" id="secErr">Please select a section</div></div>
+          </div>
+          <div class="fg"><label>Student / Parent Mobile No. <span class="req">*</span></label><input type="tel" id="mobile" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" required><div class="err" id="mobErr">Please enter valid 10-digit mobile number</div></div>
+
+          <div class="fg">
+            <label>Select Olympiad(s) <span class="req">*</span></label>
+            <div class="olympiad-grid">
+              <div class="olym-box" onclick="tog('ieo')"><input type="checkbox" id="ieo"><div><div class="o-label">IEO</div><div class="o-name">International English Olympiad</div></div></div>
+              <div class="olym-box" onclick="tog('iso')"><input type="checkbox" id="iso"><div><div class="o-label">ISO</div><div class="o-name">International Science Olympiad</div></div></div>
+              <div class="olym-box" onclick="tog('imo')"><input type="checkbox" id="imo"><div><div class="o-label">IMO</div><div class="o-name">International Mathematics Olympiad</div></div></div>
+              <div class="olym-box" onclick="tog('icso')"><input type="checkbox" id="icso"><div><div class="o-label">ICSO</div><div class="o-name">International Computer Science Olympiad</div></div></div>
+              <div class="olym-box" id="issoBox" onclick="tog('isso')"><input type="checkbox" id="isso"><div><div class="o-label">ISSO</div><div class="o-name">International Social Science Olympiad</div><div class="o-note">Class 3 and above only</div></div></div>
+              <div class="olym-box" id="ihoBox" onclick="tog('iho')"><input type="checkbox" id="iho"><div><div class="o-label">IHO</div><div class="o-name">International Hindi Olympiad</div><div class="o-note">Class 3 and above only</div></div></div>
+            </div>
+            <div class="err" id="olymErr" style="margin-top:8px;">Please select at least one Olympiad</div>
+          </div>
+
+          <div class="fee-bar"><div class="f-label">Total Fee (₹200 × <span id="olymCount">0</span> Olympiad<span id="olymPlural">s</span>)</div><div class="f-amount">₹<span id="totalFee">0</span></div></div>
+
+          <div class="fg">
+            <label>Payment Mode <span class="req">*</span></label>
+            <div class="pay-options">
+              <div class="pay-opt" onclick="selPay('UPI')">
+                <input type="radio" name="payMode" value="UPI" id="payUPI">
+                <i class="fas fa-qrcode"></i>
+                <div>
+                  <div style="font-weight:600;font-size:0.9rem;">UPI Payment</div>
+                  <div style="font-size:0.75rem;color:#64748b;">Scan QR &amp; Enter UTR No.</div>
+                </div>
+              </div>
+              <div class="pay-opt" onclick="selPay('Cash')">
+                <input type="radio" name="payMode" value="Cash" id="payCash">
+                <i class="fas fa-money-bill-wave"></i>
+                <div>
+                  <div style="font-weight:600;font-size:0.9rem;">Cash Deposited at School</div>
+                  <div style="font-size:0.75rem;color:#64748b;">Deposit cash at school office</div>
+                </div>
+              </div>
+            </div>
+            <div class="err" id="payErr" style="margin-top:8px;">Please select a payment mode</div>
+          </div>
+
+          <!-- Dynamic UPI QR & Mandatory UTR Section -->
+          <div class="upi-panel" id="upiPanel">
+            <div class="qr-wrap">
+              <h4><i class="fas fa-qrcode"></i> Scan QR Code to Pay via UPI</h4>
+              <p>Scan using any UPI app (GPay, PhonePe, Paytm, BHIM) and enter the 12-digit UTR / Transaction No. below.</p>
+              <div class="qr-img-box" id="qrContainer">
+                <span style="color:#64748b;font-size:0.85rem;">Loading QR Code...</span>
+              </div>
+              <div>
+                <span class="qr-pay-badge">Amount Payable: ₹<span id="upiPayAmount">0</span></span>
+              </div>
+            </div>
+            <div class="fg" style="margin-bottom:0;">
+              <label>UTR / UPI Transaction No. <span class="req">*</span></label>
+              <input type="text" id="utrNo" placeholder="Enter 12-digit UTR or UPI Transaction ID">
+              <div class="err" id="utrErr">Please enter your UTR / Transaction Number to complete UPI registration</div>
+            </div>
+          </div>
+
+          <!-- Dynamic Cash Deposited at School Message -->
+          <div class="cash-panel" id="cashPanel">
+            <i class="fas fa-school"></i>
+            <div>
+              <strong>Cash Deposit Instruction:</strong><br>
+              Please deposit the cash fee of <strong>₹<span id="cashPayAmount">0</span></strong> directly at the school office / counter and mention your <strong>Tracking ID</strong> (generated after submitting this form). Your registration will be confirmed once the school administration verifies your cash payment.
+            </div>
+          </div>
+
+          <div class="note-box"><i class="fas fa-info-circle"></i><strong>Important:</strong> The participating student shall deposit ₹200 per Olympiad exam with the school. Registration receipt will be available once payment is verified by the school administration.</div>
+
+          <div class="consent-box"><input type="checkbox" id="consent"><label for="consent">I hereby give my consent for my ward's participation in the SOF Olympiad 2026-27. I understand that the registration fee of ₹200 per Olympiad is non-refundable and payment is subject to verification by the school. I confirm that all the information provided above is correct.</label></div>
+          <div class="err" id="conErr" style="margin-bottom:15px;">Please provide your consent to proceed</div>
+
+          <button type="submit" class="submit-btn" id="submitBtn"><i class="fas fa-paper-plane"></i> Submit Registration</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-modal" id="successModal">
+    <div class="sm-box">
+      <div class="s-icon"><i class="fas fa-check"></i></div>
+      <h3>Registration Successful!</h3>
+      <p>Your registration has been submitted successfully.</p>
+      <div>Your Tracking ID:</div>
+      <div class="tid" id="modalTID">SOF260001</div>
+      <p id="modalFee">Total Fee: ₹200 for 1 Olympiad</p>
+      <p id="modalPayInfo" style="font-size:0.85rem;color:#1a237e;font-weight:600;"></p>
+      <p style="color:#ef4444;font-weight:500;">⚠️ Please note down your Tracking ID for future reference.</p>
+      <p style="font-size:0.8rem;">Registration is confirmed once payment is verified by the school administration.</p>
+      <div class="s-btns">
+        <a class="modal-btn secondary" href="index.html"><i class="fas fa-home"></i> Home</a>
+        <button class="modal-btn primary" onclick="newReg()"><i class="fas fa-plus"></i> New Registration</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    var classesData = [];
+    var paymentQrUrl = '';
+
+    window.addEventListener('DOMContentLoaded', async function() {
+      try {
+        var results = await Promise.all([
+          apiGet('getActiveClasses'),
+          apiGet('getLandingContent')
+        ]);
+        classesData = results[0] || [];
+        var content = results[1] || {};
+
+        var sel = document.getElementById('className');
+        classesData.forEach(function(c) {
+          var o = document.createElement('option');
+          o.value = c.className;
+          o.textContent = 'Class ' + c.className;
+          sel.appendChild(o);
+        });
+
+        paymentQrUrl = content.qr_code_url || '';
+        renderQRBox();
+      } catch (e) { console.error(e); }
+    });
+
+    function renderQRBox() {
+      var box = document.getElementById('qrContainer');
+      if (paymentQrUrl) {
+        box.innerHTML = '<img src="' + paymentQrUrl + '" alt="School UPI QR Code" onerror="this.parentElement.innerHTML=\'<span style=color:#ef4444;font-size:0.85rem;>Unable to load QR image. Please contact school admin.</span>\'">';
+      } else {
+        box.innerHTML = '<span style="color:#ef4444;font-size:0.85rem;padding:15px;">QR Code not uploaded by Admin yet.<br>Please contact school administration.</span>';
+      }
+    }
+
+    function onClassChange() {
+      var v = document.getElementById('className').value;
+      var secSel = document.getElementById('section');
+      secSel.innerHTML = '<option value="">Select Section</option>';
+      var cd = classesData.find(function(c) { return c.className === v; });
+      if (cd) {
+        cd.sections.split(',').map(function(s) { return s.trim(); }).forEach(function(s) {
+          var o = document.createElement('option');
+          o.value = s; o.textContent = 'Section ' + s;
+          secSel.appendChild(o);
+        });
+      }
+      var n = parseInt(v);
+      var issoBox = document.getElementById('issoBox');
+      var ihoBox = document.getElementById('ihoBox');
+      if (n >= 3 || isNaN(n)) {
+        issoBox.classList.remove('disabled');
+        ihoBox.classList.remove('disabled');
+      } else {
+        issoBox.classList.add('disabled');
+        ihoBox.classList.add('disabled');
+        document.getElementById('isso').checked = false;
+        document.getElementById('iho').checked = false;
+        issoBox.classList.remove('checked');
+        ihoBox.classList.remove('checked');
+      }
+      updFee();
+    }
+
+    function tog(id) {
+      var b = document.getElementById(id);
+      var c = b.closest('.olym-box');
+      if (c.classList.contains('disabled')) return;
+      b.checked = !b.checked;
+      c.classList.toggle('checked', b.checked);
+      updFee();
+    }
+
+    function updFee() {
+      var n = 0;
+      ['ieo','iso','imo','icso','isso','iho'].forEach(function(id) {
+        if (document.getElementById(id).checked) n++;
+      });
+      var amt = n * 200;
+      document.getElementById('olymCount').textContent = n;
+      document.getElementById('totalFee').textContent = amt;
+      document.getElementById('upiPayAmount').textContent = amt;
+      document.getElementById('cashPayAmount').textContent = amt;
+      document.getElementById('olymPlural').textContent = n === 1 ? '' : 's';
+    }
+
+    function selPay(m) {
+      document.querySelectorAll('.pay-opt').forEach(function(o) { o.classList.remove('selected'); });
+      document.getElementById('payErr').style.display = 'none';
+
+      var upiPanel = document.getElementById('upiPanel');
+      var cashPanel = document.getElementById('cashPanel');
+      var utrInput = document.getElementById('utrNo');
+
+      if (m === 'UPI') {
+        document.getElementById('payUPI').checked = true;
+        document.getElementById('payUPI').closest('.pay-opt').classList.add('selected');
+        upiPanel.classList.add('show');
+        cashPanel.classList.remove('show');
+        utrInput.required = true;
+      } else {
+        document.getElementById('payCash').checked = true;
+        document.getElementById('payCash').closest('.pay-opt').classList.add('selected');
+        cashPanel.classList.add('show');
+        upiPanel.classList.remove('show');
+        utrInput.required = false;
+        utrInput.value = '';
+        document.getElementById('utrErr').style.display = 'none';
+      }
+    }
+
+    function validate() {
+      var v = true;
+      function chk(id, err) {
+        if (!document.getElementById(id).value.trim()) { document.getElementById(err).style.display = 'block'; v = false; }
+        else { document.getElementById(err).style.display = 'none'; }
+      }
+      chk('studentName','nameErr'); chk('className','classErr'); chk('section','secErr');
+      var mob = document.getElementById('mobile').value.trim();
+      if (!mob || mob.length !== 10 || isNaN(mob)) { document.getElementById('mobErr').style.display = 'block'; v = false; }
+      else { document.getElementById('mobErr').style.display = 'none'; }
+      var any = false;
+      ['ieo','iso','imo','icso','isso','iho'].forEach(function(id) { if (document.getElementById(id).checked) any = true; });
+      if (!any) { document.getElementById('olymErr').style.display = 'block'; v = false; }
+      else { document.getElementById('olymErr').style.display = 'none'; }
+
+      var selectedPay = document.querySelector('input[name="payMode"]:checked');
+      if (!selectedPay) {
+        document.getElementById('payErr').style.display = 'block';
+        v = false;
+      } else {
+        document.getElementById('payErr').style.display = 'none';
+        if (selectedPay.value === 'UPI') {
+          var utrVal = document.getElementById('utrNo').value.trim();
+          if (!utrVal || utrVal.length < 6) {
+            document.getElementById('utrErr').style.display = 'block';
+            v = false;
+          } else {
+            document.getElementById('utrErr').style.display = 'none';
+          }
+        }
+      }
+
+      if (!document.getElementById('consent').checked) { document.getElementById('conErr').style.display = 'block'; v = false; }
+      else { document.getElementById('conErr').style.display = 'none'; }
+      return v;
+    }
+
+    async function submitForm(e) {
+      e.preventDefault();
+      if (!validate()) return;
+      var btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner white"></div> Submitting...';
+      var payMode = document.querySelector('input[name="payMode"]:checked').value;
+      var utrVal = payMode === 'UPI' ? document.getElementById('utrNo').value.trim() : '';
+
+      var fd = {
+        studentName: document.getElementById('studentName').value.trim(),
+        className: document.getElementById('className').value,
+        section: document.getElementById('section').value,
+        mobile: document.getElementById('mobile').value.trim(),
+        ieo: document.getElementById('ieo').checked,
+        iso: document.getElementById('iso').checked,
+        imo: document.getElementById('imo').checked,
+        icso: document.getElementById('icso').checked,
+        isso: document.getElementById('isso').checked,
+        iho: document.getElementById('iho').checked,
+        paymentMode: payMode,
+        utrNo: utrVal
+      };
+      try {
+        var r = await apiPost('submitRegistration', { formData: fd });
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Registration';
+        if (r.success) {
+          document.getElementById('modalTID').textContent = r.trackingId;
+          document.getElementById('modalFee').textContent = 'Total Fee: ₹' + r.totalAmount + ' for ' + r.olympiadCount + ' Olympiad' + (r.olympiadCount > 1 ? 's' : '');
+          document.getElementById('modalPayInfo').textContent = payMode === 'UPI'
+            ? 'Payment Mode: UPI (UTR: ' + utrVal + ')'
+            : 'Payment Mode: Cash (To be deposited at school office)';
+          document.getElementById('successModal').classList.add('show');
+        } else { alert('Error: ' + r.message); }
+      } catch (er) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Registration';
+        alert('Server error. Try again.');
+      }
+    }
+
+    function newReg() {
+      document.getElementById('successModal').classList.remove('show');
+      document.getElementById('regForm').reset();
+      document.querySelectorAll('.olym-box').forEach(function(e) { e.classList.remove('checked'); });
+      document.querySelectorAll('.pay-opt').forEach(function(e) { e.classList.remove('selected'); });
+      document.getElementById('upiPanel').classList.remove('show');
+      document.getElementById('cashPanel').classList.remove('show');
+      updFee();
+      window.scrollTo(0, 0);
+    }
+  </script>
+</body>
+</html>
